@@ -1,0 +1,387 @@
+/* ───────────── Backdrop: the studio at work ───────────── */
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 55% at 80% 22%, rgb(194 248 203 / 0.95), transparent 70%),
+    radial-gradient(ellipse 55% 50% at 4% 100%, rgb(221 212 245 / 0.9), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 58% 62%, rgb(179 233 199 / 0.5), transparent 70%),
+    #f0fff1;
+}
+
+/* A paper-coloured wash on the text side so the headline reads over the moving imagery. */
+.shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(240 255 241 / 0.95) 0%, rgb(240 255 241 / 0.76) 36%, rgb(240 255 241 / 0.14) 68%, transparent 100%),
+    linear-gradient(0deg, rgb(240 255 241 / 0.97) 0%, transparent 26%),
+    linear-gradient(180deg, rgb(240 255 241 / 0.6) 0%, transparent 16%);
+}
+
+/* Phones: copy spans the full width and the reel runs along the bottom edge,
+   so use an even wash and a much shorter fade at the foot. */
+@media (max-width: 767px) {
+  .shade {
+    background:
+      linear-gradient(90deg, rgb(240 255 241 / 0.62) 0%, rgb(240 255 241 / 0.4) 100%),
+      linear-gradient(0deg, rgb(240 255 241 / 0.9) 0%, transparent 5%),
+      linear-gradient(180deg, rgb(240 255 241 / 0.6) 0%, transparent 16%);
+  }
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 16vmax 1vmax rgb(131 103 199 / 0.14);
+}
+
+/* ── Film reels: strips of footage drifting through 3D space ── */
+
+.reels {
+  position: absolute;
+  inset: 0;
+  perspective: 1400px;
+  perspective-origin: 70% 40%;
+}
+
+.strip {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+
+/* The strips frame the headline instead of crossing it: A rises across the
+   top-right, B sweeps the open space beneath the headline. */
+.stripA {
+  --frame-w: 15rem;
+  --duration: 80s;
+  top: -7%;
+  left: 65%;
+  width: 90%;
+  opacity: 0.94;
+  transform: rotateY(-16deg) rotateX(6deg) rotateZ(-10deg);
+}
+
+.stripB {
+  --frame-w: 13rem;
+  --duration: 95s;
+  --direction: reverse;
+  top: 73%;
+  left: 55%;
+  width: 95%;
+  opacity: 0.86;
+  transform: rotateY(-16deg) rotateX(-4deg) rotateZ(6deg);
+}
+
+@media (max-width: 1023px) {
+  .stripA {
+    top: -5%;
+    left: 56%;
+  }
+  .stripB {
+    top: 83%;
+    left: 44%;
+  }
+}
+
+/* Phones: the copy fills the width, so a single smaller strip runs along the bottom edge. */
+@media (max-width: 767px) {
+  .stripA {
+    display: none;
+  }
+  .stripB {
+    --frame-w: 8rem;
+    top: auto;
+    bottom: 2%;
+    left: -15%;
+    width: 150%;
+    transform: rotateY(-10deg) rotateZ(-5deg);
+  }
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  gap: 10px;
+  padding: 22px 10px;
+  background-color: #0b0217;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='12'%3E%3Crect x='7' y='2' width='12' height='8' rx='2' fill='%23F0FFF1' fill-opacity='.32'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='12'%3E%3Crect x='7' y='2' width='12' height='8' rx='2' fill='%23F0FFF1' fill-opacity='.32'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position:
+    0 5px,
+    0 calc(100% - 5px);
+  box-shadow: 0 28px 60px -26px rgb(20 4 40 / 0.55);
+  animation: roll var(--duration, 90s) linear infinite;
+  animation-direction: var(--direction, normal);
+}
+
+@keyframes roll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.frame {
+  position: relative;
+  flex: none;
+  width: var(--frame-w, 15rem);
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: 3px;
+  background: #1f0a3d;
+}
+
+.frame img {
+  filter: saturate(0.85) contrast(1.04) brightness(0.96);
+}
+
+/* Violet-mint grade over every frame keeps the reel on-palette. */
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgb(86 3 173 / 0.3), rgb(20 4 40 / 0.05) 55%, rgb(194 248 203 / 0.14));
+  mix-blend-mode: color;
+}
+
+.frameNumber {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: rgb(240 255 241 / 0.7);
+}
+
+/* ── Stage lighting ── */
+
+/* On a light stage, light reads as tint: pastel cones multiplied onto the paper. */
+.lights {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+}
+
+/* A cone of light hanging from the rig; `from` centres the cone on straight down (180deg). */
+.beam {
+  position: absolute;
+  top: -8%;
+  left: var(--x);
+  width: var(--spread, 44vw);
+  height: 125%;
+  margin-left: calc(var(--spread, 44vw) / -2);
+  transform-origin: 50% 0;
+  background: conic-gradient(
+    from calc(180deg - var(--cone, 11deg)) at 50% 0%,
+    transparent 0deg,
+    var(--beam-color) var(--cone, 11deg),
+    transparent calc(var(--cone, 11deg) * 2),
+    transparent 360deg
+  );
+  mask-image: linear-gradient(180deg, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 88%);
+  filter: blur(2px);
+  opacity: var(--beam-opacity, 0.5);
+  animation: beam var(--beam-duration, 9s) ease-in-out infinite alternate;
+}
+
+@keyframes beam {
+  from {
+    transform: rotate(calc(var(--beam-angle, 14deg) * -1));
+  }
+  to {
+    transform: rotate(var(--beam-angle, 14deg));
+  }
+}
+
+.lamp {
+  position: absolute;
+  top: -3.5rem;
+  left: var(--x);
+  width: 7rem;
+  height: 7rem;
+  margin-left: -3.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(131 103 199 / 0.42), rgb(185 168 234 / 0.16) 45%, transparent 70%);
+}
+
+.haze {
+  position: absolute;
+  inset: auto -20% -10% -20%;
+  height: 45%;
+  background:
+    radial-gradient(ellipse 40% 60% at 30% 70%, rgb(185 168 234 / 0.32), transparent 70%),
+    radial-gradient(ellipse 35% 55% at 75% 80%, rgb(147 220 176 / 0.3), transparent 70%);
+  filter: blur(20px);
+  animation: drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  to {
+    transform: translate3d(8%, -4%, 0);
+  }
+}
+
+.particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: multiply;
+}
+
+/* ───────────── Viewfinder HUD ───────────── */
+
+.hud {
+  position: absolute;
+  inset: 5.75rem 1rem 1.25rem;
+  z-index: 5;
+  pointer-events: none;
+  color: rgb(69 2 139 / 0.74);
+}
+
+@media (min-width: 640px) {
+  .hud {
+    inset: 6.25rem 2rem 1.75rem;
+  }
+}
+
+.corner {
+  position: absolute;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-color: rgb(86 3 173 / 0.42);
+  border-style: solid;
+  border-width: 0;
+}
+
+.cornerTL {
+  top: 0;
+  left: 0;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+.cornerTR {
+  top: 0;
+  right: 0;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+}
+.cornerBL {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+}
+.cornerBR {
+  right: 0;
+  bottom: 0;
+  border-right-width: 1.5px;
+  border-bottom-width: 1.5px;
+}
+
+.thirds {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent calc(33.333% - 0.5px), rgb(86 3 173 / 0.06) 0 calc(33.333% + 0.5px), transparent 0),
+    linear-gradient(90deg, transparent calc(66.666% - 0.5px), rgb(86 3 173 / 0.06) 0 calc(66.666% + 0.5px), transparent 0),
+    linear-gradient(0deg, transparent calc(33.333% - 0.5px), rgb(86 3 173 / 0.06) 0 calc(33.333% + 0.5px), transparent 0),
+    linear-gradient(0deg, transparent calc(66.666% - 0.5px), rgb(86 3 173 / 0.06) 0 calc(66.666% + 0.5px), transparent 0);
+}
+
+.meter {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+
+.meter span {
+  width: 3px;
+  height: 100%;
+  border-radius: 1px;
+  background: linear-gradient(to top, #5603ad 0 60%, #8367c7 60% 85%, #b9a8ea 85%);
+  transform-origin: bottom;
+  animation: eq var(--eq-duration, 0.9s) ease-in-out infinite alternate;
+}
+
+@keyframes eq {
+  from {
+    transform: scaleY(0.2);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* ───────────── Autofocus brackets on the headline ───────────── */
+
+.focusBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  color: #5603ad;
+}
+
+.focusBox::before,
+.focusBox::after,
+.focusBox > i::before,
+.focusBox > i::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 0 solid currentColor;
+}
+
+.focusBox::before {
+  top: 0;
+  left: 0;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.focusBox::after {
+  top: 0;
+  right: 0;
+  border-top-width: 2px;
+  border-right-width: 2px;
+}
+.focusBox > i::before {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+}
+.focusBox > i::after {
+  right: 0;
+  bottom: 0;
+  border-right-width: 2px;
+  border-bottom-width: 2px;
+}
+
+.focusLabel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.24em;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .beam,
+  .haze {
+    animation: none;
+  }
+}
