@@ -1,0 +1,145 @@
+/*
+ * Opening titles: a film-leader countdown sweep reveals the emblem, then the
+ * curtain lifts. Pure CSS so it starts before hydration. The inline script in
+ * the root layout sets html[data-intro] to "skip" on repeat visits.
+ */
+@property --sweep {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2.25rem;
+  overflow: hidden;
+  background: radial-gradient(ellipse 80% 70% at 50% 45%, #2f0564 0%, #140428 62%);
+  color: #f0fff1;
+  animation: lift 1s cubic-bezier(0.76, 0, 0.24, 1) 1.6s forwards;
+  will-change: transform;
+}
+
+:global(html[data-intro="skip"]) .intro {
+  display: none;
+}
+
+@keyframes lift {
+  to {
+    transform: translate3d(0, -100%, 0);
+    border-bottom-left-radius: 50% 12%;
+    border-bottom-right-radius: 50% 12%;
+  }
+}
+
+.leader {
+  position: relative;
+  width: min(52vmin, 19rem);
+  aspect-ratio: 1;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(240 255 241 / 0.2);
+  border-radius: 50%;
+}
+
+.ringInner {
+  inset: 8%;
+  border-color: rgb(240 255 241 / 0.1);
+}
+
+.cross::before,
+.cross::after {
+  content: "";
+  position: absolute;
+  background: rgb(240 255 241 / 0.12);
+}
+
+.cross::before {
+  top: -12%;
+  bottom: -12%;
+  left: 50%;
+  width: 1px;
+}
+
+.cross::after {
+  top: 50%;
+  right: -12%;
+  left: -12%;
+  height: 1px;
+}
+
+.sweep {
+  position: absolute;
+  inset: 17%;
+  mask: conic-gradient(#000 var(--sweep), transparent 0);
+  animation: sweep 1.25s cubic-bezier(0.45, 0.05, 0.3, 1) 0.1s forwards;
+}
+
+@keyframes sweep {
+  to {
+    --sweep: 360deg;
+  }
+}
+
+.emblem {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: #c2f8cb;
+  filter: drop-shadow(0 0 24px rgb(194 248 203 / 0.35));
+}
+
+.hand {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 50%;
+  background: linear-gradient(to top, rgb(194 248 203 / 0.95), transparent);
+  transform-origin: bottom center;
+  animation: hand 1.25s cubic-bezier(0.45, 0.05, 0.3, 1) 0.1s forwards;
+}
+
+@keyframes hand {
+  90% {
+    opacity: 1;
+  }
+  to {
+    transform: rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  line-height: 1;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: title 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.75s forwards;
+}
+
+.title span {
+  display: block;
+  margin-top: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: #b9a8ea;
+}
+
+@keyframes title {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
