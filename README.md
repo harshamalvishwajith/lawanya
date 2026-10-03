@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lawanya Events & Digital — website
 
-## Getting Started
-
-First, run the development server:
+Marketing site for **Lawanya Events & Digital**, an independent creative studio in Kandy, Sri Lanka.
+Built with Next.js 16 (App Router, Turbopack), React 19, Tailwind CSS 4, shadcn/ui (Radix), Motion and Lenis.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev      # http://localhost:3000
+pnpm build    # production build
+pnpm lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Set `NEXT_PUBLIC_SITE_URL` (e.g. `https://lawanya.lk`) in production so share previews use absolute URLs.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Editing the site
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| What | Where |
+| --- | --- |
+| All text (home + founder story) | `lib/content.ts` |
+| Photos | `public/images/*.jpg` — replace a file with one of the **same name**; size and blur placeholder update automatically |
+| Photo alt text | `lib/images.ts` |
+| Colours, fonts, type scale | `app/globals.css` (the palette card colours are at the top) |
+| Logo files | `public/brand/` (made from `logo_white.svg`), favicon `app/icon.svg`, share image `app/opengraph-image.png` |
 
-## Learn More
+### Placeholders to replace before launch
 
-To learn more about Next.js, take a look at the following resources:
+Search `lib/content.ts` for `SAMPLE`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Photos** — every image in `public/images` is a free Pexels stock stand-in (see credits below), including `founder-portrait.jpg`.
+- **Projects** — titles, categories and meta lines in `projects` (only "Film Reading · iTV" is real).
+- **Partner logos** — `partners` currently shows invented placeholder names.
+- **Social links** — `site.socials` point to `#`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The inquiry form needs no backend: it opens the visitor's email app or WhatsApp with the message pre-written
+to `lawanyaeventz@gmail.com` / `+94 70 200 5762`. To receive inquiries directly, replace `handleSubmit` in
+`components/sections/contact/inquiry-form.tsx` with a Server Action and an email service.
 
-## Deploy on Vercel
+## How it's put together
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+app/                 routes: / (home), /story (founder), not-found, metadata files
+components/
+  ui/                shadcn/ui primitives, restyled to the brand
+  brand/             emblem, laurel, orbit badge, scene labels, social icons
+  layout/            header, mobile menu, footer, intro titles, scroll progress
+  motion/            reusable reveal / parallax / marquee / magnetic helpers
+  sections/          home page sections (hero lives in sections/hero)
+  story/             founder story page sections
+lib/                 content, image registry, utils
+hooks/               useActiveSection
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Sample photo credits
+
+All sample photos are from [Pexels](https://www.pexels.com) (free to use; attribution appreciated). Replace them with the studio's own work.
+
+| File | Pexels photo | Photographer |
+| --- | --- | --- |
+| wedding-couple.jpg | [30335822](https://www.pexels.com/photo/30335822/) | Eyyup Gürel |
+| wedding-reception.jpg | [10994594](https://www.pexels.com/photo/10994594/) | Tolga Aslanturk |
+| wedding-traditional.jpg | [11563688](https://www.pexels.com/photo/11563688/) | — |
+| destination-wedding.jpg | [2788494](https://www.pexels.com/photo/2788494/) | — |
+| concert-stage.jpg | [2263435](https://www.pexels.com/photo/2263435/) | Teddy Yang |
+| corporate-keynote.jpg | [9275222](https://www.pexels.com/photo/9275222/) | FreeStockPro |
+| gala-dinner.jpg | [16935910](https://www.pexels.com/photo/16935910/) | Matheus Bertelli |
+| brand-activation.jpg | [10508110](https://www.pexels.com/photo/10508110/) | Han Zibar |
+| cinema-camera.jpg | [28532582](https://www.pexels.com/photo/28532582/) | deep Bhullar |
+| film-set.jpg | [3411414](https://www.pexels.com/photo/3411414/) | Kyle Loftus |
+| clapperboard.jpg | [29508639](https://www.pexels.com/photo/29508639/) | StockHouse Films LLC |
+| studio-shoot.jpg | [17764817](https://www.pexels.com/photo/17764817/) | — |
+| creative-team.jpg | [8636606](https://www.pexels.com/photo/8636606/) | — |
+| content-creation.jpg | [8371401](https://www.pexels.com/photo/8371401/) | — |
+| music-video.jpg | [18421598](https://www.pexels.com/photo/18421598/) | Ezkol Arnak |
+| tv-studio.jpg | [7865064](https://www.pexels.com/photo/7865064/) | — |
+| podcast-mic.jpg | [27616685](https://www.pexels.com/photo/27616685/) | — |
+| celebration.jpg | [15964966](https://www.pexels.com/photo/15964966/) | Danik Prihodko |
+| founder-portrait.jpg | [15345390](https://www.pexels.com/photo/15345390/) | — (stand-in for Nisangi's portrait) |
+| kandy.jpg | [39797661](https://www.pexels.com/photo/39797661/) | Thilina Alagiyawanna |
+| graduation.jpg | [267885](https://www.pexels.com/photo/267885/) | — |
+| lecture.jpg | [8199162](https://www.pexels.com/photo/8199162/) | Yan Krukau |
+| event-decor.jpg | [17023020](https://www.pexels.com/photo/17023020/) | Matheus Bertelli |
+| editing-suite.jpg | [8102677](https://www.pexels.com/photo/8102677/) | Ron Lach |
+
+## Notes
+
+**Motion.** The opening titles play once per browser session. Everything honours
+`prefers-reduced-motion`: Lenis drops smooth scrolling, Motion skips transform animations, the hero
+canvas and timecode stand still and the intro is skipped.
